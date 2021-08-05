@@ -93,18 +93,3 @@ function run(min,hr,day) {
 }
 // Run every week given crontab string. In this case, this script runs every week on Saturday @ 3:00PM
 run(0,15,6);
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
