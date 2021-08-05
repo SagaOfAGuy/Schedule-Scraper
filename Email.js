@@ -3,6 +3,7 @@ const mailer = require("nodemailer");
 const fs = require("fs");
 const ScheduleFinder = require('./Schedule');
 const emailHTML = fs.readFileSync("./html/Alert.html");
+const errorHTML = fs.readFileSync("./html/Email.html");
 const cron = require('node-cron');
 const winston = require('winston');
 const { send } = require('process');
@@ -37,7 +38,7 @@ async function Send() {
 			let message =  await sender.sendMail({
 				from: `"Schedule Bot" ${process.env.EMAIL}`,
 				to: [recipList[recip]],
-				subject: 'Kroger Schedule',
+				subject: 'Work Schedule',
 				html: emailHTML,
 				attachments: 
 				[{
@@ -54,9 +55,15 @@ async function Send() {
 		logger.info("Email Successfully Sent");
 		return Promise.resolve(1);
 	} catch(error) {
-		let errormessage = await sender.sendMail({
-			
-		})
+		// Send error email if Files are missing or error occurs
+		for(var recip in recipList) {
+			let errormessage = await sender.sendMail({
+				from: `"Schedule Bot" ${process.env.EMAIL}`,
+				to: [recipList[recip]],
+				subject: 'Schedule Error',
+				html: errorHTML,
+			});
+		}
 		logger.info("Something has gone wrong",error.message);
 		return Promise.resolve(0);
 	}
