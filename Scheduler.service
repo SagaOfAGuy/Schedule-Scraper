@@ -1,0 +1,12 @@
+[Unit]
+Description=Schedule retriever and notification app
+after=network-online.target
+
+[Service]
+Restart=on-failure
+WorkingDirectory=/opt/node-apps/Schedule-Scraper
+
+ExecStart=/usr/local/bin/node /opt/node-apps/Schedule-Scraper/Email.js
+
+[Install]
+WantedBy=multi-user.target
